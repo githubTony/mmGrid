@@ -855,20 +855,37 @@
         , _nativeSorter: function(colIndex, sortStatus){
             var leafCols = this._leafCols();
             var col = leafCols[colIndex];
-
+            var sortName = col.sortName ? col.sortName : col.name;
+            
             this.$body.find('tr > td:nth-child('+(colIndex+1)+')')
                 .sortElements(function(a, b){
                     var av = $.text($(a));
                     var bv = $.text($(b));
+                    if(sortName) {
+                    	av = $.data(a.parentNode, "item")[sortName];
+                    	bv = $.data(b.parentNode, "item")[sortName];
+                    }
+                    
                     //排序前转换
                     if(col.type === 'number'){
                         av = parseFloat(av);
                         bv = parseFloat(bv);
+                        
+                        if(isNaN(av) && isNaN(bv)){
+                        	return 0;
+                        } else {
+                        	if(isNaN(av)) {
+                        		return (sortStatus === 'desc' ? 1 : -1);	
+                        	}
+                        	if(isNaN(bv)) {
+                        		return (sortStatus === 'desc' ? -1 : 1);	
+                        	}
+                        	return av > bv ? (sortStatus === 'desc' ? -1 : 1) : (sortStatus === 'desc' ? 1 : -1);	
+                        }
                     }else{
                         //各个浏览器localeCompare的结果不一致
                         return sortStatus === 'desc' ? -av.localeCompare(bv)  : av.localeCompare(bv);
                     }
-                    return av > bv ? (sortStatus === 'desc' ? -1 : 1) : (sortStatus === 'desc' ? 1 : -1);
                 }, function(){
                     return this.parentNode;
                 });
