@@ -223,7 +223,7 @@
         , limitLabel: '每页{0}条'
         , totalCountLabel: '共<span>{0}</span>条记录'
         , limit: undefined
-        , limitList: [20, 30, 40, 50]
+        , limitList: [20, 50, 100, 200, 500]
     };
 
     $.fn.mmPaginator.Constructor = MMPaginator;
