@@ -866,8 +866,9 @@
                     	bv = $.data(b.parentNode, "item")[sortName];
                     }
                     
+                    var isNumber = (typeof av === 'number') && (typeof bv === 'number')
                     //排序前转换
-                    if(col.type === 'number'){
+                    if(col.type === 'number' || isNumber){
                         av = parseFloat(av);
                         bv = parseFloat(bv);
                         
