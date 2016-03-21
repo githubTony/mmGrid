@@ -859,12 +859,12 @@
             
             this.$body.find('tr > td:nth-child('+(colIndex+1)+')')
                 .sortElements(function(a, b){
-                    var av = $.text($(a));
-                    var bv = $.text($(b));
-                    if(sortName) {
-                    	av = $.data(a.parentNode, "item")[sortName];
-                    	bv = $.data(b.parentNode, "item")[sortName];
-                    }
+                	if(!sortName) {
+                		return ;
+                	}
+                	
+                	var av = $.data(a.parentNode, "item")[sortName];
+                	var bv = $.data(b.parentNode, "item")[sortName];
                     
                     var isNumber = (typeof av === 'number') && (typeof bv === 'number')
                     //排序前转换
@@ -883,7 +883,9 @@
                         	}
                         	return av > bv ? (sortStatus === 'desc' ? -1 : 1) : (sortStatus === 'desc' ? 1 : -1);	
                         }
-                    }else{
+                    } else {
+                    	av = av + "";
+                    	bv = bv + "";
                         //各个浏览器localeCompare的结果不一致
                         return sortStatus === 'desc' ? -av.localeCompare(bv)  : av.localeCompare(bv);
                     }
